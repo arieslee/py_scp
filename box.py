@@ -38,24 +38,70 @@ class IsScp(QWidget):
         self.pwd_input = QLineEdit(self)
         self.local_file_ipt = QLineEdit(self)
         self.local_file_btn = QPushButton(self)
+        self.remote_file_ipt = QLineEdit(self)
+        self.auth_type_pwd = QRadioButton(self)
+        self.auth_type_key = QRadioButton(self)
         self.init_ui()
 
     def draw_local_file_select(self):
         box = QHBoxLayout()
         box.addWidget(self.local_file_ipt)
-        self.local_file_btn.setText("选择文件")
+        self.local_file_btn.setText("...")
         box.addWidget(self.local_file_btn)
+        self.local_file_btn.clicked.connect(self.select_file)
         return box
+
+    def select_file(self):
+        selected_file, file_type = QFileDialog.getOpenFileName(self,
+                                                                "选取文件",
+                                                                os.getcwd(),  # 起始路径
+                                                                "All Files (*);;Text Files (*.txt)"
+                                                                )  # 设置文件扩展名过滤,用双分号间隔
+
+        if selected_file == "":
+            print("\n取消选择")
+            return
+
+        print("\n你选择的文件为:")
+        print(selected_file)
+        print("文件筛选器类型: ", file_type)
+        # 获取文件大小
+        self.local_file_size = os.path.getsize(selected_file)
+        if self.local_file_size <= 0 :
+            self.alert("选择的文件太小啦")
+            return
+        print("文件大小: ", self.local_file_size)
+        self.local_file_ipt.setText(selected_file)
+
+    def draw_auth_type(self):
+        box = QHBoxLayout()
+        self.auth_type_key.setText("密钥")
+        self.auth_type_pwd.setText("账号/密码")
+        self.auth_type_pwd.setChecked(True)
+        box.addWidget(self.auth_type_pwd)
+        box.addWidget(self.auth_type_key)
+        self.auth_type_pwd.toggled.connect(self.on_radio_button_toggled)
+        return box
+
+    def on_radio_button_toggled(self):
+        if self.auth_type_pwd.isChecked():
+            print("is pwd type")
+        elif self.auth_type_key.isChecked():
+            print("is user key type")
 
     def draw_form(self):
         self.form_layout.setAlignment(QtCore.Qt.AlignLeft)
         self.form_layout.setLabelAlignment(QtCore.Qt.AlignLeft)
+        self.form_layout.setVerticalSpacing(15)
         self.ip_input.setAlignment(QtCore.Qt.AlignLeft)
-        self.form_layout.addRow("&请输入服务器ip:", self.ip_input)
-        self.form_layout.addRow("&请输入端口:", self.port_input)
-        self.form_layout.addRow("&请输入登录账号:", self.user_input)
-        self.form_layout.addRow("&请输入登录密码:", self.pwd_input)
-        self.form_layout.addRow("&请输入本地文件:", self.draw_local_file_select())
+        self.pwd_input.setEchoMode(QLineEdit.Password)
+        self.form_layout.addRow("请输入服务器ip:", self.ip_input)
+        self.form_layout.addRow("请输入端口:", self.port_input)
+        self.form_layout.addRow("请选择验证方式:", self.draw_auth_type())
+        self.form_layout.addRow("请输入登录账号:", self.user_input)
+        self.form_layout.addRow("请输入登录密码:", self.pwd_input)
+        self.form_layout.addRow("请选择要上传的文件:", self.draw_local_file_select())
+        self.form_layout.addRow("请输入远程文件保存路径:", self.remote_file_ipt)
 
     def init_ui(self):
         self.setWindowTitle("SCP 上传文件")
