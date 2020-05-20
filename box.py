@@ -41,11 +41,11 @@ class IsScp(QWidget):
         self.init_ui()
 
     def draw_local_file_select(self):
-        hbox = QHBoxLayout(self)
-        hbox.addWidget(self.local_file_ipt)
+        box = QHBoxLayout()
+        box.addWidget(self.local_file_ipt)
         self.local_file_btn.setText("选择文件")
-        hbox.addWidget(self.local_file_btn)
-        return hbox
+        box.addWidget(self.local_file_btn)
+        return box
 
     def draw_form(self):
         self.form_layout.setAlignment(QtCore.Qt.AlignLeft)
