@@ -1,0 +1,2 @@
+{"ip": "192.168.0.254", "port": "22", "user": "root", "pwd": "", "remote_file": "/home/scp.py", "auth_type": "key", "auth_key_file": "/Volumes/HDD/Douyin/local_master_id_ras", "time": "2020-05-21 13:42:32"}
+{"ip": "192.168.0.254", "port": "22", "user": "root", "pwd": "", "remote_file": "/home/scp.py", "auth_type": "key", "auth_key_file": "/Volumes/HDD/Douyin/local_master_id_ras", "time": "2020-05-21 13:42:41"}

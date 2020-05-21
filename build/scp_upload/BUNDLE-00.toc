@@ -1,0 +1,3 @@
+([('scp_upload',
+   '/Volumes/HDD/workshop/python/scp/dist/scp_upload',
+   'EXECUTABLE')],)
